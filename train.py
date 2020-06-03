@@ -26,7 +26,7 @@ def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, 
           with torch.no_grad():
             code_vector, y_pred = model(starts, contexts, ends)
             
-        loss = criterion(y_pred, labels.reshape(-1, 1))
+        loss = criterion(y_pred, labels)
         tp, fp, fn = precision_recall_f1(y_pred, labels, idx2target_vocab)
         epoch_tp += tp
         epoch_fp += fp
