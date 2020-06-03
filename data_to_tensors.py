@@ -88,7 +88,7 @@ class DatasetBuilder:
         final_path += [self.path_vocab['<pad>']] * (MAX_NUM_PATHS - len(final_path))
         final_ends += [self.value_vocab['<pad>']] * (MAX_NUM_PATHS - len(final_ends))
         final_labels = self.target_vocab.get(name, self.target_vocab['<unk>'])
-        return torch.tensor(final_start), torch.tensor(final_path), torch.tensor(final_ends), torch.tensor(final_labels).reshape(-1, 1)
+        return torch.tensor(final_start), torch.tensor(final_path), torch.tensor(final_ends), torch.tensor(final_labels)
 
     def _form_tensors(self):
         '''
