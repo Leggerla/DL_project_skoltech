@@ -20,7 +20,12 @@ def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, 
         starts, contexts, ends = starts.to(device), contexts.to(device), ends.to(device)
         labels = labels.to(device)
         
-        code_vector, y_pred = model(starts, contexts, ends)
+        if mode == 'train':
+          code_vector, y_pred = model(starts, contexts, ends)
+        else:
+          with torch.no_grad():
+            code_vector, y_pred = model(starts, contexts, ends)
+            
         loss = criterion(y_pred, labels)
         tp, fp, fn = precision_recall_f1(y_pred, labels, idx2target_vocab)
         epoch_tp += tp
