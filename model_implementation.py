@@ -35,15 +35,12 @@ class code2vec_model(nn.Module):
     ## 2. DropOut + tanh(Fully-connected layer) for combined context vectors
     self.DropOut = nn.Dropout(self.dropout_rate)
     self.linear = nn.Linear(self.path_embedding_dim + 2 * self.val_embedding_dim, self.embedding_dim, bias = False)
-    nn.init.xavier_uniform_(self.linear.weight)
     
     ## 3. Attention vector a
     self.a = nn.Parameter(torch.randn(1, self.embedding_dim))
-    nn.init.xavier_uniform_(self.a.weight)
 
     ## 4. Prediction
     self.output_linear = nn.Linear(self.embedding_dim, self.labels_num, bias = False)
-    nn.init.xavier_uniform_(self.output_linear.weight)
     
     self.neg_INF = - 2 * 10**10
 
