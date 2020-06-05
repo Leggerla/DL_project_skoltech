@@ -45,15 +45,15 @@ def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, 
         with torch.no_grad():
           epoch_loss += loss.item()
           if (mode == 'val' and num_batches % 10 == 0) or num_batches % 100 == 0:
+            if scheduler is not None and mode == 'train':
+              scheduler.step(epoch_loss)
+              
             print('Batch {}: loss - {}'.format(int(num_batches), round(epoch_loss/num_batches,5)))
             p = epoch_tp / (epoch_tp + epoch_fp + epsilon)
             r = epoch_tp / (epoch_tp + epoch_fn + epsilon)
             f1 = p * r / (p + r + epsilon)
             print('\t precision - {}, recall - {}, f1_score - {}'.format(round(p,5), round(r,5), round(f1,5)))
 
-        if scheduler is not None and mode == 'train':
-          scheduler.step(epoch_loss)
-        
         if early_stop:
             break
     
