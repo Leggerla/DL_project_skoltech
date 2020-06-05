@@ -38,12 +38,11 @@ def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, 
             loss.backward()
             optimizer.step()
 
-        epoch_loss += loss.item()
-        
         num_batches += 1
         
         with torch.no_grad():
-          print('Batch {}: loss - {}'.format(int(num_batches), round(loss.item(),5)))
+          epoch_loss += loss.item()
+          print('Batch {}: loss - {}'.format(int(num_batches), round(epoch_loss/num_batches,5)))
           p = epoch_tp / (epoch_tp + epoch_fp + epsilon)
           r = epoch_tp / (epoch_tp + epoch_fn + epsilon)
           f1 = p * r / (p + r + epsilon)
