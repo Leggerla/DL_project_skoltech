@@ -13,6 +13,7 @@ def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, 
 
     epoch_loss = 0.0
     epoch_tp, epoch_fp, epoch_fn = 0.0, 0.0, 0.0
+    epsilon = 1e-7
     
     num_batches = 0
     for starts, contexts, ends, labels in dataloader:
@@ -41,12 +42,17 @@ def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, 
         
         num_batches += 1
         
+        print('Batch {}: loss - {}'.format(int(num_batches), round(loss,5)))
+        p = epoch_tp / (epoch_tp + epoch_fp + epsilon)
+        r = epoch_tp / (epoch_tp + epoch_fn + epsilon)
+        f1 = p * r / (p + r + epsilon)
+        print('\t precision - {}, recall - {}, f1_score - {}'.format(round(p,5), round(r,5), round(f1,5)))
+        
         if early_stop:
             break
     
     num_batches = float(num_batches)
     epoch_tp, epoch_fp, epoch_fn = float(epoch_tp), float(epoch_fp), float(epoch_fn)
-    epsilon = 1e-7
     precision = epoch_tp / (epoch_tp + epoch_fp + epsilon)
     recall = epoch_tp / (epoch_tp + epoch_fn + epsilon)
     f1 = 2 * precision * recall / (precision + recall + epsilon)
