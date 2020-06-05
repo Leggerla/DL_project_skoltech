@@ -46,7 +46,7 @@ class code2vec_model(nn.Module):
       num_attention_heads = bert_params['num_attention_heads']
       num_transformer_layers = bert_params['num_transformer_layers']
       intermediate_size = bert_params['intermediate_size']
-      configuration = BertConfig(type_vocab_size=1, vocab_size=self.labels_num, hidden_size=self.embedding_dim, num_attention_heads=num_attention_heads, num_hidden_layers=num_transformer_layers, intermediate_size=intermediate_size, hidden_dropout_prob=dropout_rate, attention_probs_dropout_prob=dropout_rate)
+      configuration = BertConfig(type_vocab_size=1, vocab_size=1, hidden_size=self.embedding_dim, num_attention_heads=num_attention_heads, num_hidden_layers=num_transformer_layers, intermediate_size=intermediate_size, hidden_dropout_prob=dropout_rate, attention_probs_dropout_prob=dropout_rate)
       self.bert = BertModel(configuration)
     else:
       self.a = nn.Parameter(torch.randn(1, self.embedding_dim))
