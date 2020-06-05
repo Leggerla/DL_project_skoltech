@@ -42,11 +42,12 @@ def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, 
         
         num_batches += 1
         
-        print('Batch {}: loss - {}'.format(int(num_batches), round(loss,5)))
-        p = epoch_tp / (epoch_tp + epoch_fp + epsilon)
-        r = epoch_tp / (epoch_tp + epoch_fn + epsilon)
-        f1 = p * r / (p + r + epsilon)
-        print('\t precision - {}, recall - {}, f1_score - {}'.format(round(p,5), round(r,5), round(f1,5)))
+        with torch.no_grad():
+          print('Batch {}: loss - {}'.format(int(num_batches), round(loss.item(),5)))
+          p = epoch_tp / (epoch_tp + epoch_fp + epsilon)
+          r = epoch_tp / (epoch_tp + epoch_fn + epsilon)
+          f1 = p * r / (p + r + epsilon)
+          print('\t precision - {}, recall - {}, f1_score - {}'.format(round(p,5), round(r,5), round(f1,5)))
         
         if early_stop:
             break
