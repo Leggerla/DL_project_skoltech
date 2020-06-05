@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.nn import functional as F
 from metrics import precision_recall_f1
 from time import time
-torch.nn.utils import clip_grad_value_
+from torch.nn.utils import clip_grad_value_
 
 def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, mode='train', device = None, early_stop = False):
   
