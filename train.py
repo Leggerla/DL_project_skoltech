@@ -37,7 +37,7 @@ def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, 
         if mode == 'train':
             optimizer.zero_grad()
             loss.backward()
-            clip_grad_value_(model.parameters(), 0.3)
+            #clip_grad_value_(model.parameters(), 0.3)
             optimizer.step()
 
         num_batches += 1
