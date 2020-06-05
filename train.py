@@ -34,7 +34,7 @@ def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, 
         epoch_fp += fp
         epoch_fn += fn
         
-        if optimizer is not None:
+        if mode == 'train':
             optimizer.zero_grad()
             loss.backward()
             clip_grad_value_(model.parameters(), 3e-4)
