@@ -86,8 +86,6 @@ def train(model, optimizer, criterion, train_loader, val_loader, test_loader, ep
 
         train_loss, train_precision, train_recall, train_f1 = run_epoch(model, optimizer, criterion, train_loader, epoch,idx2target_vocab, mode = 'train', device = DEVICE, early_stop = early_stop)
         val_loss, val_precision, val_recall, val_f1 = run_epoch(model, None, criterion, val_loader, epoch, idx2target_vocab, mode = 'val', device = DEVICE, early_stop = early_stop)
-        test_loss, test_precision, test_recall, test_f1 = run_epoch(model, None, criterion, test_loader, epoch, idx2target_vocab, mode = 'val', device = DEVICE, early_stop = early_stop)
-
 
         list_train_loss.append(train_loss)
         list_val_loss.append(val_loss)
@@ -113,7 +111,6 @@ def train(model, optimizer, criterion, train_loader, val_loader, test_loader, ep
 
         print('Epoch {}: train loss - {}, validation loss - {}'.format(epoch+1, round(train_loss,5), round(val_loss,5)))
         print('\t Validation: precision - {}, recall - {}, f1_score - {}'.format(round(val_precision,5), round(val_recall,5), round(val_f1,5)))
-        print('\t Test: precision - {}, recall - {}, f1_score - {}'.format(round(test_precision,5), round(test_recall,5), round(test_f1,5)))
         print ('Elapsed time: %.3f' % (time() - start_time))
         print('----------------------------------------------------------------------')
         
