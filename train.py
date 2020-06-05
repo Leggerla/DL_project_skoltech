@@ -5,7 +5,7 @@ from metrics import precision_recall_f1
 from time import time
 from torch.nn.utils import clip_grad_value_
 
-def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, mode='train', device = None, early_stop = False):
+def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, mode='train', device = None, early_stop = False, scheduler=None):
   
     if mode == 'train':
         model.train()
@@ -50,6 +50,9 @@ def run_epoch(model, optimizer, criterion, dataloader, epoch, idx2target_vocab, 
             r = epoch_tp / (epoch_tp + epoch_fn + epsilon)
             f1 = p * r / (p + r + epsilon)
             print('\t precision - {}, recall - {}, f1_score - {}'.format(round(p,5), round(r,5), round(f1,5)))
+
+        if scheduler is not None and mode == 'train':
+          scheduler.step(epoch_loss)
         
         if early_stop:
             break
@@ -84,7 +87,7 @@ def train(model, optimizer, criterion, train_loader, val_loader, test_loader, ep
       
         start_time = time()
 
-        train_loss, train_precision, train_recall, train_f1 = run_epoch(model, optimizer, criterion, train_loader, epoch,idx2target_vocab, mode = 'train', device = DEVICE, early_stop = early_stop)
+        train_loss, train_precision, train_recall, train_f1 = run_epoch(model, optimizer, criterion, train_loader, epoch,idx2target_vocab, mode = 'train', device = DEVICE, early_stop = early_stop, scheduler=scheduler)
         val_loss, val_precision, val_recall, val_f1 = run_epoch(model, None, criterion, val_loader, epoch, idx2target_vocab, mode = 'val', device = DEVICE, early_stop = early_stop)
 
         list_train_loss.append(train_loss)
@@ -105,9 +108,6 @@ def train(model, optimizer, criterion, train_loader, val_loader, test_loader, ep
             
             if checkpoint:
                 torch.save(model.state_dict(), './best_model.pth')
-        
-        if scheduler is not None:
-            scheduler.step(train_loss)
 
         print('Epoch {}: train loss - {}, validation loss - {}'.format(epoch+1, round(train_loss,5), round(val_loss,5)))
         print('\t Validation: precision - {}, recall - {}, f1_score - {}'.format(round(val_precision,5), round(val_recall,5), round(val_f1,5)))
